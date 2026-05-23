@@ -303,18 +303,18 @@
     <div class="container">
         <div class="header">
             <h1>🎯 Username Generator</h1>
-            <p>Генератор свободных Telegram username</p>
+            <p>Генератор из английских слов</p>
         </div>
 
         <div class="card">
             <div class="input-group">
-                <label>Количество букв</label>
+                <label>Количество слов</label>
                 <div class="slider-container">
-                    <input type="range" id="letters" min="1" max="20" value="6">
+                    <input type="range" id="letters" min="1" max="3" value="1">
                     <div class="value-display">
                         <span>Минимум: 1</span>
-                        <span class="current-value" id="lettersValue">6</span>
-                        <span>Максимум: 20</span>
+                        <span class="current-value" id="lettersValue">1</span>
+                        <span>Максимум: 3</span>
                     </div>
                 </div>
             </div>
@@ -322,19 +322,19 @@
             <div class="input-group">
                 <label>Количество цифр</label>
                 <div class="slider-container">
-                    <input type="range" id="digits" min="0" max="12" value="4">
+                    <input type="range" id="digits" min="0" max="8" value="3">
                     <div class="value-display">
                         <span>Минимум: 0</span>
-                        <span class="current-value" id="digitsValue">4</span>
-                        <span>Максимум: 12</span>
+                        <span class="current-value" id="digitsValue">3</span>
+                        <span>Максимум: 8</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="total-info">
-            <div class="label">Всего символов</div>
-            <div class="value" id="totalValue">10</div>
+            <div class="label">Примеры слов</div>
+            <div class="value" style="font-size: 16px;">wood, fire, star, cyber</div>
         </div>
 
         <button class="generate-btn" id="generateBtn">
@@ -344,10 +344,10 @@
         <div class="examples">
             <h3>Быстрый выбор:</h3>
             <div class="example-chips">
-                <div class="chip" data-letters="5" data-digits="3">5 букв + 3 цифры</div>
-                <div class="chip" data-letters="8" data-digits="0">Только 8 букв</div>
-                <div class="chip" data-letters="6" data-digits="4">6 букв + 4 цифры</div>
-                <div class="chip" data-letters="10" data-digits="2">10 букв + 2 цифры</div>
+                <div class="chip" data-letters="1" data-digits="3">1 слово + 3 цифры</div>
+                <div class="chip" data-letters="2" data-digits="0">2 слова</div>
+                <div class="chip" data-letters="1" data-digits="4">1 слово + 4 цифры</div>
+                <div class="chip" data-letters="3" data-digits="0">3 слова</div>
             </div>
         </div>
 
@@ -375,7 +375,6 @@
         const digitsSlider = document.getElementById('digits');
         const lettersValue = document.getElementById('lettersValue');
         const digitsValue = document.getElementById('digitsValue');
-        const totalValue = document.getElementById('totalValue');
         const generateBtn = document.getElementById('generateBtn');
         const result = document.getElementById('result');
         const error = document.getElementById('error');
@@ -386,21 +385,14 @@
         let currentUsername = '';
 
         function updateTotal() {
-            const letters = parseInt(lettersSlider.value);
+            const words = parseInt(lettersSlider.value);
             const digits = parseInt(digitsSlider.value);
-            const total = letters + digits;
 
-            lettersValue.textContent = letters;
+            lettersValue.textContent = words;
             digitsValue.textContent = digits;
-            totalValue.textContent = total;
 
-            if (total < 5 || total > 32) {
-                generateBtn.disabled = true;
-                generateBtn.textContent = total < 5 ? '⚠️ Минимум 5 символов' : '⚠️ Максимум 32 символа';
-            } else {
-                generateBtn.disabled = false;
-                generateBtn.textContent = '🎲 Сгенерировать Username';
-            }
+            generateBtn.disabled = false;
+            generateBtn.textContent = '🎲 Сгенерировать Username';
         }
 
         lettersSlider.addEventListener('input', updateTotal);
@@ -418,14 +410,14 @@
         });
 
         generateBtn.addEventListener('click', () => {
-            const letters = parseInt(lettersSlider.value);
+            const words = parseInt(lettersSlider.value);
             const digits = parseInt(digitsSlider.value);
 
             tg.HapticFeedback.impactOccurred('medium');
 
             // Отправляем данные боту
             tg.sendData(JSON.stringify({
-                letters: letters,
+                words: words,
                 digits: digits
             }));
 
